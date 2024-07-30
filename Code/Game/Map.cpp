@@ -23,9 +23,7 @@ Map::Map(Game* game, IntVec2 dimensions)
 	m_leo = static_cast<Leo*>(SpawnNewEntityOfType(ENTITY_TYPE_EVIL_LEO, Vec2(7.5f, 1.5f), 45.0f));
 	m_aries = static_cast<Aries*>(SpawnNewEntityOfType(ENTITY_TYPE_EVIL_ARIES, Vec2(9.5f, 1.5f), 45.0f));
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
-
 Map::~Map()
 {
 	if (m_player)
@@ -58,9 +56,7 @@ Map::~Map()
 		m_aries = nullptr;
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
-
 void Map::Update(float deltaSeconds)
 {
 	UpdateCamera();
@@ -90,32 +86,27 @@ void Map::Render() const
 
 	g_theRenderer->EndCamera(m_worldCamera);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 int Map::GetTileIndexForTileCoords(int tileX, int tileY) const
 {
 	return tileX + (tileY * m_dimensions.x);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 AABB2 Map::GetTileBoundForTileCoords(int tileX, int tileY)
 {
 	return AABB2(Vec2( (float)tileX, (float)tileY ), Vec2( (float)(tileX + 1), (float)(tileY + 1 )) );
 }
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::SetTileType(int tileIndex, TileType type)
 {
 	m_tiles[tileIndex].m_tileType = type;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::SetTileType(int tileX, int tileY, TileType type)
 {
 	int tileIndex = GetTileIndexForTileCoords(tileX, tileY);
 	SetTileType(tileIndex, type);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::PopulateDistanceField(TileHeatMap& out_distanceField, IntVec2 referenceCoords, float maxCost)
 {
@@ -149,7 +140,6 @@ void Map::DoDistanceFieldPass(TileHeatMap& distanceField, float currentPassTileH
 // 		
 // 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::SpreadHeatToTile(TileHeatMap& distanceField, float nextTileHeat, IntVec2 currentTile)
 {
@@ -165,7 +155,6 @@ void Map::SpreadHeatToTile(TileHeatMap& distanceField, float nextTileHeat, IntVe
 // 
 // 	distanceField.SetHeatValuesAt(currentTile, nextTileHeat);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::RenderDebugHeatMap() const
 {
@@ -184,7 +173,6 @@ void Map::RenderDebugHeatMap() const
 	g_theRenderer->SetBlendMode(BlendMode::ALPHA);
 	g_theRenderer->DrawVertexArray((int)heatMapTileVerts.size(), heatMapTileVerts.data());
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::AddEntityToMap(Entity* entity)
 {
@@ -200,8 +188,6 @@ void Map::AddEntityToMap(Entity* entity)
 		AddEntityToList(entity, m_bulletsByFaction[entity->m_faction]);
 	}
 }
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 IntVec2 Map::GetTileCoordsForWorldPos(Vec2 const& worldPos) const
 {
@@ -209,7 +195,6 @@ IntVec2 Map::GetTileCoordsForWorldPos(Vec2 const& worldPos) const
 	int tileY = RoundDownToInt(worldPos.y);
 	return IntVec2(tileX, tileY);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 AABB2 Map::GetTileBounds(IntVec2 const& tileCoords)
 {
@@ -220,7 +205,6 @@ AABB2 Map::GetTileBounds(IntVec2 const& tileCoords)
 	bounds.m_maxs.y = bounds.m_mins.y + 1.0f;
 	return bounds;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Map::IsTileSolid(IntVec2 const& tileCoords) const
 {
@@ -237,20 +221,17 @@ bool Map::IsTileSolid(IntVec2 const& tileCoords) const
 	else
 		return false;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Map::IsPointInSolidTile(Vec2 const& worldPos) const
 {
 	IntVec2 tileCoords = GetTileCoordsForWorldPos(worldPos);
 	return IsTileSolid(tileCoords);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Map::IsTileOutOfBounds(IntVec2 const& tileCoords) const
 {
 	return (tileCoords.x < 0 || tileCoords.y < 0 || tileCoords.x >= m_dimensions.x || tileCoords.y >= m_dimensions.y);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Map::HasLineOfSight(Vec2 const& posA, Vec2 const& posB) const
 {
@@ -259,7 +240,6 @@ bool Map::HasLineOfSight(Vec2 const& posA, Vec2 const& posB) const
 	RaycastResult2D result = RaycastVsTiles(posA, dispFromAToB, dist);
 	return !result.m_didImpact;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 Entity* Map::CreateNewEntityOfType(EntityType type, Vec2 const& position, float orientationDegrees)
 {
@@ -275,13 +255,11 @@ Entity* Map::CreateNewEntityOfType(EntityType type, Vec2 const& position, float 
 
 	return nullptr;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 EntityList const& Map::GetEntitiesByType(EntityType type) const
 {
 	return m_entityListsByType[type];
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 Entity* Map::SpawnNewEntityOfType(EntityType entityType, Vec2 const& position, float orientationDegrees)
 {
@@ -294,7 +272,6 @@ Entity* Map::SpawnNewEntityOfType(EntityType entityType, Vec2 const& position, f
 	
 	return newEntity;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 RaycastResult2D Map::RaycastVsTiles_STEP_AND_SIMPLE(Vec2 startPos, Vec2 forwardDir, float maxDist) const
 {
@@ -320,14 +297,11 @@ RaycastResult2D Map::RaycastVsTiles_STEP_AND_SIMPLE(Vec2 startPos, Vec2 forwardD
 	result.m_impactPos = startPos + (forwardDir * maxDist);
 	return result;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 RaycastResult2D Map::RaycastVsTiles(Vec2 startPos, Vec2 forwardDir, float maxDist) const
 {
 	return RaycastVsTiles_STEP_AND_SIMPLE( startPos, forwardDir, maxDist);
 }
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::PopulateTiles()
 {
@@ -370,13 +344,11 @@ void Map::PopulateTiles()
 	SetTileType(m_exitPos.x, m_exitPos.y, MAP_EXIT);
 	
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::PopulateHeatMaps()
 {
 	PopulateDistanceField(m_distanceFieldFromStart, IntVec2(2, 2), maxMapDist);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Map::IsValid()
 {
@@ -387,7 +359,6 @@ bool Map::IsValid()
 // 	}
  	return true;
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::AddEntityToList(Entity* entity, EntityList& list)
 {
@@ -402,8 +373,6 @@ void Map::AddEntityToList(Entity* entity, EntityList& list)
 	
 	list.push_back(entity);  // if there were no empty slots, grow the list.
 }
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::UpdateEntities(float deltaSeconds)
 {
@@ -420,8 +389,6 @@ void Map::UpdateEntities(float deltaSeconds)
 		}
 	}
 }
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::PushAllEntitiesOutOfWalls()
 {
@@ -438,9 +405,7 @@ void Map::PushAllEntitiesOutOfWalls()
 		}
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
-
 void Map::PushEntityOutOfWalls(Entity& entity )
 {
 	if (!entity.m_isPushedByWalls)
@@ -463,7 +428,6 @@ void Map::PushEntityOutOfWalls(Entity& entity )
 	PushEntityOutOfTileIfSolid(entity, myTileCoords + STEP_SOUTHEAST);
 	PushEntityOutOfTileIfSolid(entity, myTileCoords + STEP_SOUTHWEST);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::PushEntityOutOfTileIfSolid(Entity& entity, IntVec2 const& tileCoords)
 {
@@ -475,7 +439,6 @@ void Map::PushEntityOutOfTileIfSolid(Entity& entity, IntVec2 const& tileCoords)
 	Vec2 nearestPointOnTile = tileBounds.GetNearestPoint(entity.m_position);
 	PushDiscOutOfFixedPoint2D(entity.m_position, entity.m_physicsRadius, nearestPointOnTile);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::AddVertsForTile(std::vector<Vertex_PCU>& verts, int tileIndex) const
 {
@@ -486,7 +449,6 @@ void Map::AddVertsForTile(std::vector<Vertex_PCU>& verts, int tileIndex) const
 	AABB2 UVs = tileDef.m_UVs;
 	AddVertsForAABB2D(verts, bounds, color, UVs );
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::RenderTiles() const
 {
@@ -503,7 +465,6 @@ void Map::RenderTiles() const
 	}
 	g_theRenderer->DrawVertexArray((int)tileVerts.size(), tileVerts.data());
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::RenderEntities() const
 {
@@ -522,7 +483,6 @@ void Map::RenderEntities() const
 
 	RenderDebugDrawEntities();
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::RenderDebugDrawEntities() const
 {
@@ -542,7 +502,6 @@ void Map::RenderDebugDrawEntities() const
 		}
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::PushEntitiesOutOfEachOther(Entity& a, Entity& b) const
 {
@@ -569,7 +528,6 @@ void Map::PushEntitiesOutOfEachOther(Entity& a, Entity& b) const
 		PushDiscOutOfFixedDisc2D(a.m_position, a.m_physicsRadius, b.m_position, b.m_physicsRadius);
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::RemoveEntityFromMap(Entity* entity)
 {
@@ -586,7 +544,6 @@ void Map::RemoveEntityFromMap(Entity* entity)
 	}
 
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::DeleteGarbageEntities()
 {
@@ -607,7 +564,6 @@ void Map::DeleteGarbageEntities()
 		}
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::RemoveEntityFromList(Entity* entity, EntityList& list)
 {
@@ -619,7 +575,6 @@ void Map::RemoveEntityFromList(Entity* entity, EntityList& list)
 		}
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::CheckBulletVsActor(Bullets& bullet, Entity& actor)
 {
@@ -631,7 +586,6 @@ void Map::CheckBulletVsActor(Bullets& bullet, Entity& actor)
 
 	actor.ReactToBulletHit(bullet);
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Map::DoEntitiesOverlap(Entity& a, Entity& b)
 {
@@ -644,7 +598,6 @@ bool Map::DoEntitiesOverlap(Entity& a, Entity& b)
 		return false;
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::DoEntityCollisions()
 {
@@ -675,7 +628,6 @@ void Map::CheckCollisionBetweenEntityLists(EntityList& listA, EntityList& listB)
 		}
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::CheckForBulletHits()
 {
@@ -693,7 +645,6 @@ void Map::CheckForBulletHits()
 		}
 	}
 }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 void Map::CheckBulletsListVsActorList(EntityList& bulletsList, EntityList& actorList)
 {
@@ -721,7 +672,6 @@ void Map::CheckBulletsListVsActorList(EntityList& bulletsList, EntityList& actor
  		}
  	}
 }
-
 //-------------------------------------------------------------------------------------------------------------------------------------------------------
  Entity* Map::GetClosestVisibleEntityOfType(Vec2 const& refPos, EntityType type, float maxDist) 
   {
@@ -829,7 +779,6 @@ void Map::CheckBulletsListVsActorList(EntityList& bulletsList, EntityList& actor
 		 m_worldCamera.SetOrthographicView(bottomLeft, topRight);
 	 }
  }
-
  //--------------------------------------------------------------------------------------------------------------------------------------------------------
  void Map::DebugCamera()
  {
