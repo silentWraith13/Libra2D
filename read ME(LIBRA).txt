@@ -1,0 +1,25 @@
+How to use?
+1) Press 'space' to enter game from attract mode.
+2) Press 'space' to shoot.
+3) W,A,S,D or joystick to move player.
+4) 'Esc' to pause. Again to go to attract mode. Again to exit application or 'Q' to exit altogether.
+5) All debug render keys are acc to document.
+
+
+Known Issues
+1) There is only entity of each kind(document specified the number of entities).
+2) The AABB drawn in pause mode is not proper.
+3) No debug render for 'noClip' and 'godMode'. Its there in the code but not working. There are themselves working but debug for them is not.
+ 
+Deep Learning
+
+The first thing I implemented when I started this project was making the maps and tiles. In starship, 'game' was handling all the entity management.
+But here we took a different approach, 'game' owned map which owned tiles and entities etc. So this approach was new and interesting to me as I learned new ways to manage the game.
+ Then I tried to implement the functionality for playerTanks. Here we did not use the 'starship' way. Here we used 'std::vector' to draw and initialize vertices. First problem was getting used to this way of rendering.
+Then we added textures to our engine and binded them to our entities. Because of lack of knowledge, I had unintenionally created a memory leak as I forgot to null a texture. Debugging that with my lead gave me a useful insight on hwo to look for bugs like these.
+Next thing I added was TileDefinitions. Before we were just using enums. Here, I learned of something called a 'factory' function where we assigned properties to each tile like uv's, isSolid, tint etc. This was fairly diffcult for me as I had to ask for help from the GA's as I had created bugs when I added these to tiles. 
+Next, I added some modules for the engine like spriteAnimation, Bitmap font support, SpriteDefinitions and more. I had problems in visualising these but I got through with the help of something which my lead keeps telling us to develop,"Drawing your problem on a paper or a board".
+Now we had so many entities and according to the document we had to use different lists for their management. Things became quite chaotic after that as I was not managing my lists properly. Adding to some other list, deleting from some other. My lead helped me to solve all of these. Everytime I ask my lead, the GA's or my peers something, I learn a new and a fresh way to approach my problems.
+Throughtout the semester we have changed our ways of doing things. I learned to adapt to the new paradigm everytime. At one point, I had given up hope. I was stuck and not able to progress any further.
+I am still in the process of learning how not to panic and not get disheartened if there is no progress. I am getting better at managing my time and I thank my lead for that.
+ I have learned a lot during this semester but coudnt perform to the level I could have. This was just a taste of what is about to come and now I will be better prepared for it.
